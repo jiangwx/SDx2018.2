@@ -1,0 +1,12 @@
+**/Release/
+**/Debug
+.vscode
+**/.metadata
+**/.settings/
+*.tar.gz
+*.zip
+*.pdf
+*_system
+*.log
+**/RemoteSystemsTempFiles
+**/ip_cache

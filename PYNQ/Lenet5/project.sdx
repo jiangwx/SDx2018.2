@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="ASCII"?>
+<sdsproject:SDSProject xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:sdsproject="http://www.xilinx.com/sdsproject" name="Lenet5" location="D:/SDx2018.2/Lenet5" platform="C:/Xilinx/SDx/2018.2/platforms\PYNQ\PYNQ.xpfm" platformUID="xilinx.com:PYNQ:PYNQ:1.0" systemProject="Lenet5_system" sysConfig="linux" runtime="C/C++" cpu="linux" cpuInstance="" os="linux" ConfigType="Debug">
+  <configuration name="Debug" id="com.xilinx.sdsoc.managedbuild.project.debug.265311293">
+    <configBuildOptions xsi:type="sdsproject:Option" insertapm="false" gensdcard="true" dmclkid="1" estimateSpeedup="true" enableHwSwTrace="false" traceApplication="false">
+      <accelerator name="CONV1POOL1CONV2POOL2" filepath="src/conv.cpp" clkid="1" location="D:/SDx2018.2/Lenet5/src/conv.cpp"/>
+    </configBuildOptions>
+    <lastBuildOptions xsi:type="sdsproject:Option" insertapm="false" gensdcard="true" dmclkid="1" estimateSpeedup="true" enableHwSwTrace="false" traceApplication="false">
+      <accelerator name="CONV1POOL1CONV2POOL2" filepath="src/conv.cpp" clkid="1" location="D:/SDx2018.2/Lenet5/src/conv.cpp"/>
+    </lastBuildOptions>
+  </configuration>
+  <configuration name="Release" id="com.xilinx.sdsoc.managedbuild.project.release.1353232206">
+    <configBuildOptions xsi:type="sdsproject:Option" insertapm="false" gensdcard="true" dmclkid="1" enableHwSwTrace="false" traceApplication="false">
+      <accelerator name="CONV1POOL1CONV2POOL2" filepath="src/conv.cpp" clkid="1" location="D:/SDx2018.2/Lenet5/src/conv.cpp"/>
+    </configBuildOptions>
+    <lastBuildOptions xsi:type="sdsproject:Option" insertapm="false" gensdcard="true" dmclkid="1" enableHwSwTrace="false" traceApplication="false">
+      <accelerator name="CONV1POOL1CONV2POOL2" filepath="src/conv.cpp" clkid="1" location="D:/SDx2018.2/Lenet5/src/conv.cpp"/>
+    </lastBuildOptions>
+  </configuration>
+</sdsproject:SDSProject>

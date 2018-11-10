@@ -11,9 +11,9 @@ int main(int argc, char **argv)
     Lenet5_init();
     load_weight();
     load_data(blob,input);
-    //generate_data(blob,input);
     hw_ctr.start();
     Lenet5(blob);
     hw_ctr.stop();
-    printf("LeNet5 costs %llu cycles\n",hw_ctr.avg_cpu_cycles());
+    //printf("LeNet5 costs %llu cycles\n",hw_ctr.avg_cpu_cycles());
+
 }

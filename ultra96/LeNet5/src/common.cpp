@@ -22,14 +22,6 @@ void load_data(DTYPE* data,layer net)
     fread(data, 1, len * sizeof(DTYPE), fp);
     fclose(fp);
 }
-void generate_data(DTYPE* data,layer net)
-{
-	int len = net.od*net.ow*net.oh;
-	for(int i=0;i<len;i++)
-	{
-		data[i]=(DTYPE)rand();
-	}
-}
 void check_data(DTYPE *data,layer net)
 {
     int len = net.od*net.ow*net.oh;
@@ -47,7 +39,7 @@ void check_data(DTYPE *data,layer net)
         if (((data[i] - tmp[i]) > CheckScale) || ((data[i] - tmp[i]) < -CheckScale))
         {
             err++;
-            printf("data[%d]:correct = %f, wrong =%f\n",i,(float)tmp[i],(float)data[i]);
+            printf("data[%d]:correct = %f, wrong =%f\n",i,tmp[i],data[i]);
         }
     }
 

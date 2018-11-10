@@ -71,24 +71,24 @@ void Lenet5_init()
 int Lenet5(DTYPE* input)
 {
     int label;
-    //ctr.start();
+    ctr.start();
     CONV1POOL1CONV2POOL2(input,pool2_output,conv1_weight,conv2_weight,conv1_bias,conv2_bias);
-    //ctr.stop();
-    //printf("CONV1POOL1CONV2POOL2 costs %llu cycles\n",ctr.avg_cpu_cycles());
+    ctr.stop();
+    printf("CONV1POOL1CONV2POOL2 costs %llu cycles\n",ctr.avg_cpu_cycles());
 
-    //ctr.reset();
-    //ctr.start();
+    ctr.reset();
+    ctr.start();
     conv(pool2_output, ip1_output, ip1_weight, ip1_bias, Lenet[ip1],1);
-    //ctr.stop();
-    //printf("ip1 costs %llu cycles\n",ctr.avg_cpu_cycles());
+    ctr.stop();
+    printf("ip1 costs %llu cycles\n",ctr.avg_cpu_cycles());
 
-    //ctr.reset();
-    //ctr.start();
+    ctr.reset();
+    ctr.start();
     conv(ip1_output, ip2_output, ip2_weight, ip2_bias, Lenet[ip2],0);
-    //ctr.stop();
-    //printf("ip2 costs %llu cycles\n",ctr.avg_cpu_cycles());
+    ctr.stop();
+    printf("ip2 costs %llu cycles\n",ctr.avg_cpu_cycles());
 
-    //check_data(ip2_output,Lenet[ip2]);
+    check_data(ip2_output,Lenet[ip2]);
     label = max(ip2_output, Lenet[ip2]);
     return label;
 }

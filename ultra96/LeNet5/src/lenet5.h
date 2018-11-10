@@ -1,19 +1,16 @@
 #ifndef __CONV__H__
 #define __CONV__H__
-
+typedef float DTYPE;
 #include <stdlib.h>
 #include <string.h>
 #include <cmath>
 #include <iostream>
 #include <cstring>
 #include <stdio.h>
-#include "ap_fixed.h"
+
 #include "sds_lib.h"
 #include "sds_utils.h"
 
-typedef char DTYPE;
-//typedef ap_fixed<8,4,AP_RND,AP_WRAP> DTYPE;
-//typedef float DTYPE;
 #define CheckScale 0.01
 #define IMG_W 28
 #define IMG_H 28
@@ -29,7 +26,6 @@ enum Net_idx {data, conv1, pool1,conv2, pool2, ip1, ip2};
 void check_data(DTYPE *data,layer net);
 void load_wb(layer net, DTYPE *weight, DTYPE *bias);
 void load_data(DTYPE* data,layer net);
-void generate_data(DTYPE* data,layer net);
 void conv(DTYPE *in, DTYPE *out, DTYPE *weight, DTYPE *bias, layer net, int relu);
 void maxpool(DTYPE *in, DTYPE *out, layer net);
 /*

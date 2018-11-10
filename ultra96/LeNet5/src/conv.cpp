@@ -46,19 +46,6 @@ void conv(DTYPE *in, DTYPE *out, DTYPE *weight, DTYPE *bias, layer net, int relu
 
 void CONV1POOL1CONV2POOL2(DTYPE* in,DTYPE* out,DTYPE* conv1_w,DTYPE* conv2_w,DTYPE* conv1_b,DTYPE* conv2_b)
 {
-#pragma HLS INTERFACE m_axi depth=16 port=conv2_b offset=slave bundle=IO
-#pragma HLS interface s_axilite port=conv2_b bundle=s_axi_AXILiteS
-#pragma HLS INTERFACE m_axi depth=6 port=conv1_b offset=slave bundle=IO
-#pragma HLS interface s_axilite port=conv1_b bundle=s_axi_AXILiteS
-#pragma HLS INTERFACE m_axi depth=2400 port=conv2_w offset=slave bundle=IO
-#pragma HLS interface s_axilite port=conv2_w bundle=s_axi_AXILiteS
-#pragma HLS INTERFACE m_axi depth=150 port=conv1_w offset=slave bundle=IO
-#pragma HLS interface s_axilite port=conv1_w bundle=s_axi_AXILiteS
-#pragma HLS INTERFACE m_axi depth=256 port=out offset=slave bundle=IO
-#pragma HLS interface s_axilite port=out bundle=s_axi_AXILiteS
-#pragma HLS INTERFACE m_axi depth=784 port=in offset=slave bundle=IO
-#pragma HLS interface s_axilite port=in bundle=s_axi_AXILiteS
-#pragma HLS interface s_axilite port=return bundle=s_axi_AXILiteS
     DTYPE IBUFF[16][28*28];
 #pragma HLS RESOURCE variable=IBUFF core=RAM_2P_BRAM
 #pragma HLS ARRAY_PARTITION variable=IBUFF complete dim=1
@@ -70,7 +57,7 @@ void CONV1POOL1CONV2POOL2(DTYPE* in,DTYPE* out,DTYPE* conv1_w,DTYPE* conv2_w,DTY
 #pragma HLS ARRAY_PARTITION variable=CONV1_WBUFF block factor=6 dim=1
     DTYPE CONV2_WBUFF[6*16][5*5];
 #pragma HLS RESOURCE variable=CONV2_WBUFF core=RAM_2P_BRAM
-#pragma HLS ARRAY_PARTITION variable=CONV2_WBUFF block factor=24 dim=1
+#pragma HLS ARRAY_PARTITION variable=CONV2_WBUFF block factor=12 dim=1
     DTYPE CONV1_BBUFF[6];
 #pragma HLS ARRAY_PARTITION variable=CONV1_BBUFF complete dim=0
     DTYPE CONV2_BBUFF[16];
@@ -136,7 +123,6 @@ void CONV1POOL1CONV2POOL2(DTYPE* in,DTYPE* out,DTYPE* conv1_w,DTYPE* conv2_w,DTY
                     {
                         DTYPE odatatmp = OBUFF[tm][tr*24 + tc];
                         DTYPE odata = 0;
-#pragma HLS RESOURCE variable=odata core=DSP_Macro
                         odata += CONV1_WBUFF[tm][kh* 5 + kw] * IBUFF[0][28*ih + iw];
                         OBUFF[tm][tr*24 + tc] = odata + odatatmp;
                     }
@@ -202,7 +188,6 @@ void CONV1POOL1CONV2POOL2(DTYPE* in,DTYPE* out,DTYPE* conv1_w,DTYPE* conv2_w,DTY
                     {
                         DTYPE odatatmp = OBUFF[tm][tr*8 + tc];
                         DTYPE odata = 0;
-#pragma HLS RESOURCE variable=odata core=DSP_Macro
                         for (int id = 0; id < 6; id++)
                             odata += CONV2_WBUFF[tm*6 + id][kh* 5 + kw] * IBUFF[id][idx];
                         OBUFF[tm][tr*8 + tc] = odata + odatatmp;

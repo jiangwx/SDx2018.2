@@ -77,3 +77,12 @@ void convolution_mm(float *ifm, float *ofm, float *weight, float *bias, layer l,
     }
     add_bias(om,ofm,bias,l,relu);
 }
+
+void fc(float *ifm, float *ofm, float *weight, float *bias, layer l, int relu)
+{
+    float* om=(float*)calloc(l.oh*l.ow*l.oc, sizeof(float));
+
+    gemm(ifm,weight,om,l);
+
+    add_bias(om,ofm,bias,l,relu);
+}

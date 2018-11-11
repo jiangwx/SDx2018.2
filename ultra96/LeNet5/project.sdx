@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ASCII"?>
 <sdsproject:SDSProject xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:sdsproject="http://www.xilinx.com/sdsproject" name="LeNet5" location="D:/SDx2018.2/ultra96/LeNet5" platform="C:/Xilinx/SDx/2018.2/platforms\ultra96\ultra96.xpfm" platformUID="em.avnet.com:ultra96:ultra96:1.0" systemProject="LeNet5_system" sysConfig="linux" runtime="C/C++" cpu="A53_Linux" cpuInstance="" os="linux" ConfigType="Debug">
-  <configuration name="Debug" id="com.xilinx.sdsoc.managedbuild.project.debug.769442598" dirty="true">
+  <configuration name="Debug" id="com.xilinx.sdsoc.managedbuild.project.debug.769442598">
     <configBuildOptions xsi:type="sdsproject:Option" insertapm="false" gensdcard="true" dmclkid="3" enableHwSwTrace="false" traceApplication="false"/>
     <lastBuildOptions xsi:type="sdsproject:Option" insertapm="false" gensdcard="true" dmclkid="3" enableHwSwTrace="false" traceApplication="false"/>
   </configuration>

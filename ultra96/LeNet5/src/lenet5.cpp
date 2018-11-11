@@ -78,13 +78,13 @@ int Lenet5(DTYPE* input)
 
     ctr.reset();
     ctr.start();
-    convolution_mm(pool2_output, ip1_output, ip1_weight, ip1_bias, Lenet[ip1],1);
+    fc(pool2_output, ip1_output, ip1_weight, ip1_bias, Lenet[ip1],1);
     ctr.stop();
     printf("ip1 costs %llu cycles\n",ctr.avg_cpu_cycles());
 
     ctr.reset();
     ctr.start();
-    convolution_mm(ip1_output, ip2_output, ip2_weight, ip2_bias, Lenet[ip2],0);
+    fc(ip1_output, ip2_output, ip2_weight, ip2_bias, Lenet[ip2],0);
     ctr.stop();
     printf("ip2 costs %llu cycles\n",ctr.avg_cpu_cycles());
 

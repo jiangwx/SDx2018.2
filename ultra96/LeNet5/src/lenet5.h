@@ -45,6 +45,7 @@ void check_data(DTYPE *data,layer net);
 void load_wb(layer net, DTYPE *weight, DTYPE *bias);
 void load_data(DTYPE* data,layer net);
 void show_data(DTYPE *data,layer net);
+void fc(float *ifm, float *ofm, float *weight, float *bias, layer l, int relu);
 void convolution_mm(float *ifm, float *ofm, float *weight, float *bias, layer l, int relu);
 void maxpool(float *ifm, float *ofm, layer l);
 /*

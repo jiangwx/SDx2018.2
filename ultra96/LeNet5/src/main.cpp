@@ -24,24 +24,13 @@ int main(int argc, char **argv)
 	cv::Mat resized_binarized_img;
 	cv::resize(binarized_img, resized_binarized_img, cv::Size(IMG_W, IMG_H), (0, 0), (0, 0), cv::INTER_LINEAR);
 
-    DTYPE *blob = (DTYPE *)sds_alloc(sizeof(DTYPE)*IMG_W*IMG_H);
-    cvMat2array(resized_binarized_img,blob);
-	for (int i=0;i<IMG_H;i++)
-	{
-		for (int j=0;j<IMG_W;j++)
-		{
-			printf("%.1f ",blob[i*IMG_W+j]);
-		}
-		printf("\n");
-	}
-	printf("------------------------------------------\n");
-	show_data(blob,input);
-
-    Lenet5_init();
-    load_weight();
-    hw_ctr.start();
-    label=Lenet5(blob);
-    hw_ctr.stop();
-    printf("the number is %d\n", label);
+	DTYPE *blob = (DTYPE *)sds_alloc(sizeof(DTYPE)*IMG_W*IMG_H);
+	cvMat2array(resized_binarized_img,blob);
+	Lenet5_init();
+	load_weight();
+	hw_ctr.start();
+	label=Lenet5(blob);
+	hw_ctr.stop();
+	printf("the number is %d\n", label);
 
 }

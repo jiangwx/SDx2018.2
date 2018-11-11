@@ -22,34 +22,37 @@
 							<tool id="com.xilinx.sdsoc.managedbuild.toolchain.ccompiler.1540887750" name="SDSCC Compiler" superClass="com.xilinx.sdsoc.managedbuild.toolchain.ccompiler">
 								<option id="xilinx.gnu.compiler.dircategory.includes.13010203" name="Include Paths" superClass="xilinx.gnu.compiler.dircategory.includes" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;../src&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;C:\xfopencv\HLS_Use_Model&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;C:\SYSROOT_arm64\usr\include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;C:\xfopencv\include&quot;"/>
 								</option>
-								<option id="xilinx.gnu.compiler.inferred.swplatform.flags.1410978036" superClass="xilinx.gnu.compiler.inferred.swplatform.flags" value="-I${SYSROOT_arm64}/usr/include -hls-target 1" valueType="string"/>
+								<option id="xilinx.gnu.compiler.inferred.swplatform.flags.1410978036" name="Software Platform Inferred Flags" superClass="xilinx.gnu.compiler.inferred.swplatform.flags" value="-I${SYSROOT_arm64}/usr/include -hls-target 1" valueType="string"/>
+								<option id="xilinx.gnu.compiler.option.optimization.level.1451630038" name="Optimization Level" superClass="xilinx.gnu.compiler.option.optimization.level" value="gnu.c.optimization.level.most" valueType="enumerated"/>
 								<inputType id="com.xilinx.sdsoc.managedbuild.tool.sdscc.input.1994540281" name="C source files" superClass="com.xilinx.sdsoc.managedbuild.tool.sdscc.input"/>
 							</tool>
 							<tool id="com.xilinx.sdsoc.managedbuild.toolchain.cppcompiler.1389396378" name="SDS++ Compiler" superClass="com.xilinx.sdsoc.managedbuild.toolchain.cppcompiler">
 								<option id="xilinx.gnu.compiler.dircategory.includes.212613236" name="Include Paths" superClass="xilinx.gnu.compiler.dircategory.includes" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;../src&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;C:\xfopencv\HLS_Use_Model&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;C:\SYSROOT_arm64\usr\include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;C:\xfopencv\include&quot;"/>
 								</option>
-								<option id="xilinx.gnu.compiler.inferred.swplatform.flags.449179673" superClass="xilinx.gnu.compiler.inferred.swplatform.flags" value="-I${SYSROOT_arm64}/usr/include -hls-target 1" valueType="string"/>
+								<option id="xilinx.gnu.compiler.inferred.swplatform.flags.449179673" name="Software Platform Inferred Flags" superClass="xilinx.gnu.compiler.inferred.swplatform.flags" value="-I${SYSROOT_arm64}/usr/include -hls-target 1" valueType="string"/>
+								<option id="xilinx.gnu.compiler.option.optimization.level.919803000" name="Optimization Level" superClass="xilinx.gnu.compiler.option.optimization.level" value="gnu.c.optimization.level.most" valueType="enumerated"/>
 								<inputType id="com.xilinx.sdsoc.managedbuild.tool.sdspp.input.1521605707" name="C++ source files" superClass="com.xilinx.sdsoc.managedbuild.tool.sdspp.input"/>
 							</tool>
 							<tool id="com.xilinx.sdsoc.managedbuild.toolchain.linker.2038023243" name="SDS++ Linker" superClass="com.xilinx.sdsoc.managedbuild.toolchain.linker">
-								<option id="xilinx.gnu.c.link.option.libs.136225555" superClass="xilinx.gnu.c.link.option.libs" valueType="libs">
+								<option id="xilinx.gnu.c.link.option.libs.136225555" name="Libraries (-l)" superClass="xilinx.gnu.c.link.option.libs" valueType="libs">
 									<listOptionValue builtIn="false" value="opencv_core"/>
 									<listOptionValue builtIn="false" value="opencv_imgproc"/>
 									<listOptionValue builtIn="false" value="opencv_videoio"/>
 									<listOptionValue builtIn="false" value="opencv_imgcodecs"/>
 									<listOptionValue builtIn="false" value="opencv_highgui"/>
+									<listOptionValue builtIn="false" value="openblas"/>
 								</option>
-								<option id="xilinx.gnu.c.link.option.paths.551293817" superClass="xilinx.gnu.c.link.option.paths" valueType="libPaths">
+								<option id="xilinx.gnu.c.link.option.paths.551293817" name="Library search path (-L)" superClass="xilinx.gnu.c.link.option.paths" valueType="libPaths">
 									<listOptionValue builtIn="false" value="/usr/lib"/>
 									<listOptionValue builtIn="false" value="/lib"/>
 								</option>
-								<option id="xilinx.gnu.c.link.option.ldflags.207937813" superClass="xilinx.gnu.c.link.option.ldflags" value="--sysroot=${SYSROOT_arm64} -Wl,-rpath-link=${SYSROOT_arm64}/lib,-rpath-link=${SYSROOT_arm64}/usr/lib" valueType="string"/>
+								<option id="xilinx.gnu.c.link.option.ldflags.207937813" name="Linker Flags" superClass="xilinx.gnu.c.link.option.ldflags" value="--sysroot=${SYSROOT_arm64} -Wl,-rpath-link=${SYSROOT_arm64}/lib,-rpath-link=${SYSROOT_arm64}/usr/lib" valueType="string"/>
 								<inputType id="xilinx.gnu.linker.input.1012426760" superClass="xilinx.gnu.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
@@ -86,12 +89,14 @@
 							<tool command="sdscc" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="" id="com.xilinx.sdsoc.managedbuild.project.release.sdscc.1408166283" name="SDSCC Compiler" superClass="com.xilinx.sdsoc.managedbuild.project.release.sdscc">
 								<option id="xilinx.gnu.compiler.dircategory.includes.700034817" name="Include Paths" superClass="xilinx.gnu.compiler.dircategory.includes" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;../src&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;C:\xfopencv\include&quot;"/>
 								</option>
 								<inputType id="com.xilinx.sdsoc.managedbuild.tool.sdscc.input.1719850355" name="C source files" superClass="com.xilinx.sdsoc.managedbuild.tool.sdscc.input"/>
 							</tool>
 							<tool command="sds++" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="" id="com.xilinx.sdsoc.managedbuild.project.release.sdspp.2077300799" name="SDS++ Compiler" superClass="com.xilinx.sdsoc.managedbuild.project.release.sdspp">
 								<option id="xilinx.gnu.compiler.dircategory.includes.1722657737" name="Include Paths" superClass="xilinx.gnu.compiler.dircategory.includes" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;../src&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;C:\xfopencv\include&quot;"/>
 								</option>
 								<inputType id="com.xilinx.sdsoc.managedbuild.tool.sdspp.input.186275586" name="C++ source files" superClass="com.xilinx.sdsoc.managedbuild.tool.sdspp.input"/>
 							</tool>
@@ -129,5 +134,9 @@
 		<scannerConfigBuildInfo instanceId="com.xilinx.sdsoc.managedbuild.project.debug.769442598;com.xilinx.sdsoc.managedbuild.project.debug.769442598.">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.xilinx.sdsoc.managedbuild.scannerprofile"/>
 		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="com.xilinx.sdsoc.managedbuild.project.release.1109666954;com.xilinx.sdsoc.managedbuild.project.release.1109666954.">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.xilinx.sdsoc.managedbuild.scannerprofile"/>
+		</scannerConfigBuildInfo>
 	</storageModule>
+	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 </cproject>

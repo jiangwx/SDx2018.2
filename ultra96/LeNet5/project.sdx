@@ -5,11 +5,7 @@
     <lastBuildOptions xsi:type="sdsproject:Option" insertapm="false" gensdcard="true" dmclkid="3" enableHwSwTrace="false" traceApplication="false"/>
   </configuration>
   <configuration name="Release" id="com.xilinx.sdsoc.managedbuild.project.release.1109666954" dirty="true">
-    <configBuildOptions xsi:type="sdsproject:Option" insertapm="false" gensdcard="true" dmclkid="3" enableHwSwTrace="false" traceApplication="false">
-      <accelerator name="CONV1POOL1CONV2POOL2" filepath="src/conv.cpp" clkid="3" location="D:/SDx2018.2/ultra96/LeNet5/src/conv.cpp"/>
-    </configBuildOptions>
-    <lastBuildOptions xsi:type="sdsproject:Option" insertapm="false" gensdcard="true" dmclkid="3" enableHwSwTrace="false" traceApplication="false">
-      <accelerator name="CONV1POOL1CONV2POOL2" filepath="src/conv.cpp" clkid="3" location="D:/SDx2018.2/ultra96/LeNet5/src/conv.cpp"/>
-    </lastBuildOptions>
+    <configBuildOptions xsi:type="sdsproject:Option" insertapm="false" gensdcard="true" dmclkid="3" enableHwSwTrace="false" traceApplication="false"/>
+    <lastBuildOptions xsi:type="sdsproject:Option" insertapm="false" gensdcard="true" dmclkid="3" enableHwSwTrace="false" traceApplication="false"/>
   </configuration>
 </sdsproject:SDSProject>

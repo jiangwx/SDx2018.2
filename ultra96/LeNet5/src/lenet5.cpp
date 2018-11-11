@@ -25,11 +25,11 @@ DTYPE* ip2_output;
 DTYPE* ip2_weight;
 DTYPE* ip2_bias;
 
-int max(DTYPE *in,layer Lenet)
+int max(DTYPE *in,layer l)
 {
     int index = 0;
     DTYPE tmp=in[0];
-    for (int i = 1; i < Lenet.od; i++)
+    for (int i = 1; i < l.oc; i++)
     {
         if (in[i] > tmp)
         {
@@ -50,21 +50,21 @@ void load_weight()
 }
 void Lenet5_init()
 {
-	blob         = (DTYPE*)sds_alloc(Lenet[data].id*Lenet[data].ih*Lenet[data].iw*sizeof(DTYPE));
-	conv1_output = (DTYPE*)sds_alloc(Lenet[conv1].od*Lenet[conv1].oh*Lenet[conv1].ow*sizeof(DTYPE));
-	conv1_weight = (DTYPE*)sds_alloc(Lenet[conv1].id*Lenet[conv1].od*Lenet[conv1].kernel*Lenet[conv1].kernel*sizeof(DTYPE));
-	conv1_bias   = (DTYPE*)sds_alloc(Lenet[conv1].od*sizeof(DTYPE));
-	pool1_output = (DTYPE*)sds_alloc(Lenet[pool1].od*Lenet[pool1].oh*Lenet[pool1].ow*sizeof(DTYPE));
-	conv2_output = (DTYPE*)sds_alloc(Lenet[conv2].od*Lenet[conv2].oh*Lenet[conv2].ow*sizeof(DTYPE));
-	conv2_weight = (DTYPE*)sds_alloc(Lenet[conv2].id*Lenet[conv2].od*Lenet[conv2].kernel*Lenet[conv2].kernel*sizeof(DTYPE));
-	conv2_bias   = (DTYPE*)sds_alloc(Lenet[conv2].od*sizeof(DTYPE));
-	pool2_output = (DTYPE*)sds_alloc(Lenet[pool2].od*Lenet[pool2].oh*Lenet[pool2].ow*sizeof(DTYPE));
-	ip1_output   = (DTYPE*)sds_alloc(Lenet[ip1].od*Lenet[ip1].oh*Lenet[ip1].ow*sizeof(DTYPE));
-	ip1_weight   = (DTYPE*)sds_alloc(Lenet[ip1].id*Lenet[ip1].od*Lenet[ip1].kernel*Lenet[ip1].kernel*sizeof(DTYPE));
-	ip1_bias     = (DTYPE*)sds_alloc(Lenet[ip1].od*sizeof(DTYPE));
-	ip2_output   = (DTYPE*)sds_alloc(Lenet[ip2].od*Lenet[ip2].oh*Lenet[ip2].ow*sizeof(DTYPE));
-	ip2_weight   = (DTYPE*)sds_alloc(Lenet[ip2].id*Lenet[ip2].od*Lenet[ip2].kernel*Lenet[ip2].kernel*sizeof(DTYPE));
-	ip2_bias     = (DTYPE*)sds_alloc(Lenet[ip2].od*sizeof(DTYPE));
+	blob         = (DTYPE*)sds_alloc(Lenet[data].ic*Lenet[data].ih*Lenet[data].iw*sizeof(DTYPE));
+	conv1_output = (DTYPE*)sds_alloc(Lenet[conv1].oc*Lenet[conv1].oh*Lenet[conv1].ow*sizeof(DTYPE));
+	conv1_weight = (DTYPE*)sds_alloc(Lenet[conv1].ic*Lenet[conv1].oc*Lenet[conv1].k*Lenet[conv1].k*sizeof(DTYPE));
+	conv1_bias   = (DTYPE*)sds_alloc(Lenet[conv1].oc*sizeof(DTYPE));
+	pool1_output = (DTYPE*)sds_alloc(Lenet[pool1].oc*Lenet[pool1].oh*Lenet[pool1].ow*sizeof(DTYPE));
+	conv2_output = (DTYPE*)sds_alloc(Lenet[conv2].oc*Lenet[conv2].oh*Lenet[conv2].ow*sizeof(DTYPE));
+	conv2_weight = (DTYPE*)sds_alloc(Lenet[conv2].ic*Lenet[conv2].oc*Lenet[conv2].k*Lenet[conv2].k*sizeof(DTYPE));
+	conv2_bias   = (DTYPE*)sds_alloc(Lenet[conv2].oc*sizeof(DTYPE));
+	pool2_output = (DTYPE*)sds_alloc(Lenet[pool2].oc*Lenet[pool2].oh*Lenet[pool2].ow*sizeof(DTYPE));
+	ip1_output   = (DTYPE*)sds_alloc(Lenet[ip1].oc*Lenet[ip1].oh*Lenet[ip1].ow*sizeof(DTYPE));
+	ip1_weight   = (DTYPE*)sds_alloc(Lenet[ip1].ic*Lenet[ip1].oc*Lenet[ip1].k*Lenet[ip1].k*sizeof(DTYPE));
+	ip1_bias     = (DTYPE*)sds_alloc(Lenet[ip1].oc*sizeof(DTYPE));
+	ip2_output   = (DTYPE*)sds_alloc(Lenet[ip2].oc*Lenet[ip2].oh*Lenet[ip2].ow*sizeof(DTYPE));
+	ip2_weight   = (DTYPE*)sds_alloc(Lenet[ip2].ic*Lenet[ip2].oc*Lenet[ip2].k*Lenet[ip2].k*sizeof(DTYPE));
+	ip2_bias     = (DTYPE*)sds_alloc(Lenet[ip2].oc*sizeof(DTYPE));
 }
 
 
@@ -78,62 +78,18 @@ int Lenet5(DTYPE* input)
 
     ctr.reset();
     ctr.start();
-    conv(pool2_output, ip1_output, ip1_weight, ip1_bias, Lenet[ip1],1);
+    convolution_mm(pool2_output, ip1_output, ip1_weight, ip1_bias, Lenet[ip1],1);
     ctr.stop();
     printf("ip1 costs %llu cycles\n",ctr.avg_cpu_cycles());
 
     ctr.reset();
     ctr.start();
-    conv(ip1_output, ip2_output, ip2_weight, ip2_bias, Lenet[ip2],0);
+    convolution_mm(ip1_output, ip2_output, ip2_weight, ip2_bias, Lenet[ip2],0);
     ctr.stop();
     printf("ip2 costs %llu cycles\n",ctr.avg_cpu_cycles());
 
-    //check_data(ip2_output,Lenet[ip2]);
     for (int i=0;i<10;i++) printf("%f, ",ip2_output[i]);
     label = max(ip2_output, Lenet[ip2]);
     return label;
 }
-/*
-int Lenet5(DTYPE* input)
-{
-    int label;
-    ctr.start();
-    CONV1(input,conv1_output,conv1_weight,conv1_bias);
-    ctr.stop();
-    printf("CONV1 costs %llu cycles\n",ctr.avg_cpu_cycles());
-
-    ctr.reset();
-    ctr.start();
-    maxpool(conv1_output,pool1_output,Lenet[pool1]);
-    ctr.stop();
-    printf("POOL1 costs %llu cycles\n",ctr.avg_cpu_cycles());
-
-    ctr.reset();
-    ctr.start();
-    CONV2(pool1_output,conv2_output,conv2_weight,conv2_bias);
-    ctr.stop();
-    printf("CONV2 costs %llu cycles\n",ctr.avg_cpu_cycles());
-
-    ctr.reset();
-    ctr.start();
-    maxpool(conv2_output,pool2_output,Lenet[pool2]);
-    ctr.stop();
-    printf("POOL2 costs %llu cycles\n",ctr.avg_cpu_cycles());
-
-    ctr.reset();
-    ctr.start();
-    conv(pool2_output, ip1_output, ip1_weight, ip1_bias, Lenet[ip1],1);
-    ctr.stop();
-    printf("ip1 costs %llu cycles\n",ctr.avg_cpu_cycles());
-
-    ctr.reset();
-    ctr.start();
-    conv(ip1_output, ip2_output, ip2_weight, ip2_bias, Lenet[ip2],0);
-    ctr.stop();
-    printf("ip2 costs %llu cycles\n",ctr.avg_cpu_cycles());
-
-    check_data(ip2_output,Lenet[ip2]);
-    label = max(ip2_output, Lenet[ip2]);
-    return label;
-}*/
 

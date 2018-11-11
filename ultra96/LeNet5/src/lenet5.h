@@ -7,6 +7,7 @@ typedef float DTYPE;
 #include <iostream>
 #include <cstring>
 #include <stdio.h>
+#include <cblas.h>
 
 #if __SDSCC__
 #undef __ARM_NEON__
@@ -33,8 +34,8 @@ typedef float DTYPE;
 struct layer
 {
     char name[15];
-    int iw, ih, id, ow, oh, od;
-    int kernel, stride, pad;
+    int iw, ih, ic, ow, oh, oc;
+    int k, s, p;
 };
 
 enum Net_idx {data, conv1, pool1,conv2, pool2, ip1, ip2};
@@ -44,25 +45,13 @@ void check_data(DTYPE *data,layer net);
 void load_wb(layer net, DTYPE *weight, DTYPE *bias);
 void load_data(DTYPE* data,layer net);
 void show_data(DTYPE *data,layer net);
-void conv(DTYPE *in, DTYPE *out, DTYPE *weight, DTYPE *bias, layer net, int relu);
-void maxpool(DTYPE *in, DTYPE *out, layer net);
+void convolution_mm(float *ifm, float *ofm, float *weight, float *bias, layer l, int relu);
+void maxpool(float *ifm, float *ofm, layer l);
 /*
 #pragma SDS data copy(in[0:28*28],out[0:6*24*24],weight[0:6*5*5],bias[0:6])
 #pragma SDS data data_mover(in:AXIDMA_SIMPLE, out:AXIDMA_SIMPLE, weight:AXIDMA_SIMPLE, bias:AXIDMA_SIMPLE)
 #pragma SDS data access_pattern(in:SEQUENTIAL, out:SEQUENTIAL, weight:SEQUENTIAL, bias:SEQUENTIAL)
 #pragma SDS data sys_port(in:ACP,out:AFI,weight:ACP,bias:ACP)*/
-
-#pragma SDS data zero_copy(in[0:28*28],out[0:6*24*24],weight[0:6*5*5],bias[0:6])
-#pragma SDS data data_mover(in:AXIDMA_SIMPLE, out:AXIDMA_SIMPLE, weight:AXIDMA_SIMPLE, bias:AXIDMA_SIMPLE)
-#pragma SDS data access_pattern(in:SEQUENTIAL, out:SEQUENTIAL, weight:SEQUENTIAL, bias:SEQUENTIAL)
-#pragma SDS data sys_port(in:AFI,out:AFI,weight:AFI,bias:AFI)
-void CONV1(DTYPE* in,DTYPE* out,DTYPE* weight,DTYPE* bias);
-
-#pragma SDS data zero_copy(in[0:6*12*12],out[0:16*8*8],weight[0:6*16*5*5],bias[0:16])
-#pragma SDS data data_mover(in:AXIDMA_SIMPLE, out:AXIDMA_SIMPLE, weight:AXIDMA_SIMPLE, bias:AXIDMA_SIMPLE)
-#pragma SDS data access_pattern(in:SEQUENTIAL, out:SEQUENTIAL, weight:SEQUENTIAL, bias:SEQUENTIAL)
-#pragma SDS data sys_port(in:AFI,out:AFI,weight:AFI,bias:AFI);
-void CONV2(DTYPE* in,DTYPE* out,DTYPE* weight,DTYPE* bias);
 
 #pragma SDS data zero_copy(in[0:28*28],out[0:16*4*4],conv1_w[0:6*5*5],conv2_w[0:6*16*5*5],conv1_b[0:6],conv2_b[0:16])
 #pragma SDS data data_mover(in:AXIDMA_SIMPLE, out:AXIDMA_SIMPLE, conv1_w:AXIDMA_SIMPLE, conv2_w:AXIDMA_SIMPLE,conv1_b:AXIDMA_SIMPLE,conv2_b:AXIDMA_SIMPLE)

@@ -1,66 +1,65 @@
 #include "lenet5.h"
 
-void maxpool(DTYPE *in, DTYPE *out, layer net)
+void maxpool(float *ifm, float *ofm, layer l)
 {
-    for (int od = 0; od < net.od; od++)
+    for (int oc = 0; oc < l.oc; oc++)
     {
-        for (int oh = 0; oh < net.oh; oh++)
+        for (int oh = 0; oh < l.oh; oh++)
         {
-            for (int ow = 0; ow < net.ow; ow++)
+            for (int ow = 0; ow < l.ow; ow++)
             {
-                float odata=-3400000000;
-                int outcnt = od * net.oh * net.ow + oh * net.ow + ow;
-                for (int wh = 0; wh < net.kernel; wh++)
+                float odata = -34000000;
+                for(int kh = 0; kh < l.k; kh++)
                 {
-                    for (int ww = 0; ww < net.kernel; ww++)
+                    for(int kw = 0; kw < l.k; kw++)
                     {
-                        float ret;
+                        float ret = 0;
+                        int fw = ow*l.s - l.p + kw;
+                        int fh = oh*l.s - l.p + kh;
+                        int fm_index = oc * l.ih * l.iw + fh * l.iw + fw;
 
-                        int xind = ow*net.stride + ww - net.pad;
-                        int yind = oh*net.stride + wh - net.pad;
-
-                        int incnt = od * net.ih*net.iw + yind *net.iw + xind;
-
-                        if ((xind < 0) || (xind > (net.iw - 1)) || (yind < 0) || (yind > (net.ih - 1)))	ret = 0;
-                        else ret = in[incnt];
+                        if ((fw < 0) || (fw >(l.iw - 1)) || (fh < 0) || (fh >(l.ih - 1)))
+                            ret = 34000000;
+                        else
+                            ret = ifm[fm_index];
 
                         if (ret > odata) odata = ret;
                     }
                 }
-                out[outcnt] = odata;
+                ofm[oc * l.oh * l.ow + oh * l.ow + ow] = odata;
             }
         }
     }
 }
 
-void avgpool(DTYPE *in, DTYPE *out, layer net)
+
+void avgpool(float *ifm, float *ofm, layer l)
 {
-    for (int od = 0; od < net.od; od++)
+    for (int oc = 0; oc < l.oc; oc++)
     {
-        for (int oh = 0; oh < net.oh; oh++)
+        for (int oh = 0; oh < l.oh; oh++)
         {
-            for (int ow = 0; ow < net.ow; ow++)
+            for (int ow = 0; ow < l.ow; ow++)
             {
-                DTYPE odata = 0;
-                int outcnt = od * net.oh * net.ow + oh * net.ow + ow;
-                for (int wh = 0; wh < net.kernel; wh++)
+                float odata = 0;
+                for(int kh=0;kh<l.k;kh++)
                 {
-                    for (int ww = 0; ww < net.kernel; ww++)
+                    for(int kw=0;kw<l.k;kw++)
                     {
-                        DTYPE ret = 0;
+                        float ret = 0;
+                        int fw = ow*l.s - l.p + kw;
+                        int fh = oh*l.s - l.p + kh;
+                        int fm_index = oc * l.ih * l.iw + fh * l.iw + fw;
 
-                        int xind = ow*net.stride + ww - net.pad;
-                        int yind = oh*net.stride + wh - net.pad;
+                        if ((fw < 0) || (fw > (l.iw - 1)) || (fh < 0) || (fh > (l.ih - 1)))
+                            ret = 0;
+                        else
+                            ret = ifm[fm_index];
 
-                        int incnt = od * net.ih*net.iw + yind *net.iw + xind;
-
-                        if ((xind < 0) || (xind > (net.iw - 1)) || (yind < 0) || (yind > (net.ih - 1)))	ret = 0;
-                        else ret = in[incnt];
-
-                        odata += ret;
+                        odata = odata + ret;
                     }
                 }
-                out[outcnt] = odata/(net.kernel*net.kernel);
+                ofm[oc * l.oh * l.ow + oh * l.ow + ow] = odata / (l.k*l.k);
             }
         }
     }

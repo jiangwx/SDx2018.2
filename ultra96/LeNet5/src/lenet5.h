@@ -8,8 +8,23 @@ typedef float DTYPE;
 #include <cstring>
 #include <stdio.h>
 
+#if __SDSCC__
+#undef __ARM_NEON__
+#undef __ARM_NEON
+#include "opencv2/opencv.hpp"
+#include "opencv2/imgproc/imgproc.hpp"
+#include "opencv2/highgui/highgui.hpp"
+#define __ARM_NEON__
+#define __ARM_NEON
+#else
+#include "opencv2/opencv.hpp"
+#include "opencv2/imgproc/imgproc.hpp"
+#include "opencv2/highgui/highgui.hpp"
+#endif
+
 #include "sds_lib.h"
 #include "sds_utils.h"
+
 
 #define CheckScale 0.01
 #define IMG_W 28
@@ -23,9 +38,12 @@ struct layer
 };
 
 enum Net_idx {data, conv1, pool1,conv2, pool2, ip1, ip2};
+
+void cvMat2array(cv::Mat cvMat, DTYPE* array);
 void check_data(DTYPE *data,layer net);
 void load_wb(layer net, DTYPE *weight, DTYPE *bias);
 void load_data(DTYPE* data,layer net);
+void show_data(DTYPE *data,layer net);
 void conv(DTYPE *in, DTYPE *out, DTYPE *weight, DTYPE *bias, layer net, int relu);
 void maxpool(DTYPE *in, DTYPE *out, layer net);
 /*

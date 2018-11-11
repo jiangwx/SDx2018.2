@@ -88,7 +88,8 @@ int Lenet5(DTYPE* input)
     ctr.stop();
     printf("ip2 costs %llu cycles\n",ctr.avg_cpu_cycles());
 
-    check_data(ip2_output,Lenet[ip2]);
+    //check_data(ip2_output,Lenet[ip2]);
+    for (int i=0;i<10;i++) printf("%f, ",ip2_output[i]);
     label = max(ip2_output, Lenet[ip2]);
     return label;
 }

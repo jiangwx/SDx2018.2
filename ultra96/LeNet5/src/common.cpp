@@ -1,4 +1,15 @@
 #include "lenet5.h"
+
+void cvMat2array(cv::Mat cvMat, DTYPE* array)
+{
+	int length = cvMat.cols*cvMat.rows;
+	for(int i=0;i<length;i++)
+	{
+		array[i]=(float)cvMat.data[i];
+	}
+
+}
+
 void load_wb(layer net, DTYPE *weight, DTYPE *bias)
 {
     int wlen=net.id*net.od*net.kernel*net.kernel;
@@ -46,4 +57,21 @@ void check_data(DTYPE *data,layer net)
     if (err > 0) { printf("error cnt= %d, %s\n", err, net.name);}
     else { printf("correct %s \n", net.name);}
     free(tmp);
+}
+void show_data(DTYPE *data,layer net)
+{
+    char nstr[50];
+    int len = net.od*net.ow*net.oh;
+    sprintf(nstr, "/mnt/Lenet5/blob/%s.blob", net.name);
+    FILE *fp = fopen(nstr, "rb");
+    fread(data, 1, len * sizeof(DTYPE), fp);
+    fclose(fp);
+    for(int i =0;i<net.ih;i++)
+    {
+    	for(int j=0;j<net.iw;j++)
+    	{
+    		printf("%.1f ",data[i*IMG_W+j]);
+    	}
+    	printf("\n");
+    }
 }

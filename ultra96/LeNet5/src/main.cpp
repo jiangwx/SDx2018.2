@@ -8,7 +8,7 @@ layer input = { "data", 28,28,1,28,28,1,0,0,0};
 
 int main(int argc, char **argv)
 {
-	char* image_path = argv[1];
+/*	char* image_path = argv[1];
 	int label;
 
 	cv::Mat src_img;
@@ -25,17 +25,15 @@ int main(int argc, char **argv)
 	cv::cvtColor(inversed_img, gray_img, cv::COLOR_BGR2GRAY);
 	cv::threshold(gray_img, binarized_img, 150, 255, cv::THRESH_BINARY|cv::THRESH_OTSU);
 	pre_process.stop();
-	printf("pre-process cost %llu cycles\n", pre_process.avg_cpu_cycles());
-	//cv::Mat resized_binarized_img;
-	//cv::resize(binarized_img, resized_binarized_img, cv::Size(IMG_W, IMG_H), (0, 0), (0, 0), cv::INTER_LINEAR);
+	printf("pre-process cost %f ms\n", (float)pre_process.avg_cpu_cycles()/(float)clock_frequency);*/
 
 	DTYPE *blob = (DTYPE *)sds_alloc(sizeof(DTYPE)*IMG_W*IMG_H);
-	cvMat2array(binarized_img,blob);
+	load_data(blob,input);
+	//cvMat2array(binarized_img,blob);
 	Lenet5_init();
 	load_weight();
 	hw_ctr.start();
-	label=Lenet5(blob);
+	Lenet5(blob);
 	hw_ctr.stop();
-	printf("the number is %d\n", label);
-
+	//printf("the number is %d\n", label);
 }

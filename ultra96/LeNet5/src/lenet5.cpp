@@ -74,21 +74,23 @@ int Lenet5(DTYPE* input)
     ctr.start();
     CONV1POOL1CONV2POOL2(input,pool2_output,conv1_weight,conv2_weight,conv1_bias,conv2_bias);
     ctr.stop();
-    printf("CONV1POOL1CONV2POOL2 costs %llu cycles\n",ctr.avg_cpu_cycles());
+    //printf("CONV1POOL1CONV2POOL2 costs %f ms\n",(float)ctr.avg_cpu_cycles()/(float)clock_frequency);
+    check_data(pool2_output,Lenet[pool2]);
 
     ctr.reset();
     ctr.start();
-    fc(pool2_output, ip1_output, ip1_weight, ip1_bias, Lenet[ip1],1);
+    convolution(pool2_output, ip1_output, ip1_weight, ip1_bias, Lenet[ip1],1);
     ctr.stop();
-    printf("ip1 costs %llu cycles\n",ctr.avg_cpu_cycles());
+    //printf("ip1 costs %f ms\n",(float)ctr.avg_cpu_cycles()/(float)clock_frequency);
+    check_data(ip1_output,Lenet[ip1]);
 
     ctr.reset();
     ctr.start();
-    fc(ip1_output, ip2_output, ip2_weight, ip2_bias, Lenet[ip2],0);
+    convolution(ip1_output, ip2_output, ip2_weight, ip2_bias, Lenet[ip2],0);
     ctr.stop();
-    printf("ip2 costs %llu cycles\n",ctr.avg_cpu_cycles());
+    //printf("ip2 costs %f ms\n",(float)ctr.avg_cpu_cycles()/(float)clock_frequency);
 
-    for (int i=0;i<10;i++) printf("%f, ",ip2_output[i]);
+    //for (int i=0;i<10;i++) printf("%f, ",ip2_output[i]);
     label = max(ip2_output, Lenet[ip2]);
     return label;
 }

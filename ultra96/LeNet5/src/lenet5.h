@@ -7,9 +7,7 @@ typedef float DTYPE;
 #include <iostream>
 #include <cstring>
 #include <stdio.h>
-#include <cblas.h>
 
-#if __SDSCC__
 #undef __ARM_NEON__
 #undef __ARM_NEON
 #include "opencv2/opencv.hpp"
@@ -17,15 +15,11 @@ typedef float DTYPE;
 #include "opencv2/highgui/highgui.hpp"
 #define __ARM_NEON__
 #define __ARM_NEON
-#else
-#include "opencv2/opencv.hpp"
-#include "opencv2/imgproc/imgproc.hpp"
-#include "opencv2/highgui/highgui.hpp"
-#endif
 
 #include "sds_lib.h"
 #include "sds_utils.h"
 
+#define clock_frequency 1200000
 
 #define CheckScale 0.01
 #define IMG_W 28
@@ -45,8 +39,7 @@ void check_data(DTYPE *data,layer net);
 void load_wb(layer net, DTYPE *weight, DTYPE *bias);
 void load_data(DTYPE* data,layer net);
 void show_data(DTYPE *data,layer net);
-void fc(float *ifm, float *ofm, float *weight, float *bias, layer l, int relu);
-void convolution_mm(float *ifm, float *ofm, float *weight, float *bias, layer l, int relu);
+void convolution(float *ifm, float *ofm, float *weight, float *bias, layer l, int relu);
 void maxpool(float *ifm, float *ofm, layer l);
 /*
 #pragma SDS data copy(in[0:28*28],out[0:6*24*24],weight[0:6*5*5],bias[0:6])

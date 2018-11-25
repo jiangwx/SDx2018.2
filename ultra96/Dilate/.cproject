@@ -20,7 +20,7 @@
 					<folderInfo id="com.xilinx.sdsoc.managedbuild.project.debug.1611867468." name="/" resourcePath="">
 						<toolChain id="com.xilinx.sdsoc.managedbuild.project.debug.toolchain.1130504825" name="SDS Toolchain" superClass="com.xilinx.sdsoc.managedbuild.project.debug.toolchain">
 							<targetPlatform binaryParser="com.xilinx.sdk.managedbuilder.XELF.armlinux" id="com.xilinx.sdsoc.managedbuild.toolchain.targetplatform.1504145008" isAbstract="false" name="SDS Target Platform" superClass="com.xilinx.sdsoc.managedbuild.toolchain.targetplatform"/>
-							<builder buildPath="${workspace_loc:/cv_accel}/Debug" enableAutoBuild="true" id="com.xilinx.sdsoc.managedbuild.toolchain.builder.302243296" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="GNU make" superClass="com.xilinx.sdsoc.managedbuild.toolchain.builder"/>
+							<builder buildPath="${workspace_loc:/Dilate}/Debug" enableAutoBuild="true" id="com.xilinx.sdsoc.managedbuild.toolchain.builder.302243296" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="GNU make" superClass="com.xilinx.sdsoc.managedbuild.toolchain.builder"/>
 							<tool id="com.xilinx.sdsoc.managedbuild.toolchain.ccompiler.1803749779" name="SDSCC Compiler" superClass="com.xilinx.sdsoc.managedbuild.toolchain.ccompiler">
 								<option id="xilinx.gnu.compiler.dircategory.includes.233442956" name="Include Paths" superClass="xilinx.gnu.compiler.dircategory.includes" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;../src&quot;"/>
@@ -88,7 +88,7 @@
 					<folderInfo id="com.xilinx.sdsoc.managedbuild.project.release.1155374774." name="/" resourcePath="">
 						<toolChain id="com.xilinx.sdsoc.managedbuild.project.release.toolchain.269193348" name="SDS Toolchain" superClass="com.xilinx.sdsoc.managedbuild.project.release.toolchain">
 							<targetPlatform binaryParser="com.xilinx.sdk.managedbuilder.XELF.armlinux" id="com.xilinx.sdsoc.managedbuild.toolchain.targetplatform.871163181" isAbstract="false" name="SDS Target Platform" superClass="com.xilinx.sdsoc.managedbuild.toolchain.targetplatform"/>
-							<builder buildPath="${workspace_loc:/cv_accel}/Release" enableAutoBuild="true" id="com.xilinx.sdsoc.managedbuild.toolchain.builder.554425183" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="GNU make" superClass="com.xilinx.sdsoc.managedbuild.toolchain.builder"/>
+							<builder buildPath="${workspace_loc:/Dilate}/Release" enableAutoBuild="true" id="com.xilinx.sdsoc.managedbuild.toolchain.builder.554425183" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="GNU make" superClass="com.xilinx.sdsoc.managedbuild.toolchain.builder"/>
 							<tool id="com.xilinx.sdsoc.managedbuild.project.release.sdscc.1545380261" name="SDSCC Compiler" superClass="com.xilinx.sdsoc.managedbuild.project.release.sdscc">
 								<option id="xilinx.gnu.compiler.dircategory.includes.2032112311" name="Include Paths" superClass="xilinx.gnu.compiler.dircategory.includes" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;../src&quot;"/>
@@ -140,14 +140,14 @@
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
 	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
-		<project id="cv_accel.com.xilinx.sdsoc.managedbuild.project.660195026" name="Xilinx SDS Project" projectType="com.xilinx.sdsoc.managedbuild.project"/>
+		<project id="Dilate.com.xilinx.sdsoc.managedbuild.project.660195026" name="Xilinx SDS Project" projectType="com.xilinx.sdsoc.managedbuild.project"/>
 	</storageModule>
 	<storageModule moduleId="refreshScope" versionNumber="2">
 		<configuration configurationName="Debug">
-			<resource resourceType="PROJECT" workspacePath="/cv_accel"/>
+			<resource resourceType="PROJECT" workspacePath="/Dilate"/>
 		</configuration>
 		<configuration configurationName="Release">
-			<resource resourceType="PROJECT" workspacePath="/cv_accel"/>
+			<resource resourceType="PROJECT" workspacePath="/Dilate"/>
 		</configuration>
 	</storageModule>
 	<storageModule moduleId="scannerConfiguration">

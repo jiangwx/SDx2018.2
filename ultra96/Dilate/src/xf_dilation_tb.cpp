@@ -28,31 +28,36 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ***************************************************************************/
 
-#ifndef _XF_DILATION_CONFIG_H_
-#define _XF_DILATION_CONFIG_H_
+#include "xf_headers.h"
+#include "xf_dilation_config.h"
 
-#include "hls_stream.h"
-#include "ap_int.h"
-#include "common/xf_common.h"
-#include "common/xf_utility.h"
-#include "imgproc/xf_dilation.hpp"
+int main(int argc, char** argv)
+{
 
-/* config width and height */
-#define WIDTH 	1280
-#define HEIGHT	720
+	if(argc != 2)
+	{
+		fprintf(stderr,"Invalid Number of Arguments!\nUsage:\n");
+		fprintf(stderr,"<Executable Name> <input image path> \n");
+		return -1;
+	}
 
-#define RO 0 // Resource Optimized (8-pixel implementation)
-#define NO 1 // Normal Operation (1-pixel implementation)
+	cv::Mat xf_in,xf_out;
+	timeval start,end;
 
-/*  define the input and output types  */
+	// reading in the color image
+	xf_in.data=(unsigned char*)sds_alloc(sizeof(unsigned char)*WIDTH*HEIGHT);
+	xf_out.data=(unsigned char*)sds_alloc(sizeof(unsigned char)*WIDTH*HEIGHT);
+	xf_in = cv::imread(argv[1], 0);
 
-#define NPPC XF_NPPC1
-//#define NPPC XF_NPPC8
-#define TYPE XF_8UC1
+	if (xf_in.data == NULL)
+	{
+		fprintf(stderr,"Cannot open image at %s\n", argv[1]);
+		return 0;
+	}
 
-void dilation_accel(xf::Mat<TYPE, HEIGHT, WIDTH, NPPC> &_src,xf::Mat<TYPE, HEIGHT, WIDTH, NPPC> &_dst);
+	xf_out.create(xf_in.rows,xf_in.cols,CV_8UC1);
+	xf_dilate(xf_in,xf_out);
+	cv::imwrite("out_ocv.jpg", xf_out);
 
-
-#endif // _XF_DILATION_CONFIG_H_
-
-
+	return 0;
+}

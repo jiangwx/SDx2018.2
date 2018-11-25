@@ -1,22 +1,24 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdint.h>
-#include <time.h>
-#include <sys/time.h>
-
-#undef __ARM_NEON__
-#undef __ARM_NEON
-#include "opencv2/opencv.hpp"
-#include "opencv2/highgui/highgui.hpp"
-#include "opencv2/imgproc/imgproc.hpp"
-#define __ARM_NEON__
-#define __ARM_NEON
-#include "sds_lib.h"
-#include "jf_bgr2gray_config.h"
+#include "jf_headers.h"
 
 void bgr2gray(cv::Mat& bgr, cv::Mat& gray)
 {
-	jf_rgb2gray(bgr.data,bgr.data + 1,bgr.data + 2,gray.data,bgr.rows,bgr.cols);
+	timeval start,end;
+	gettimeofday(&start, NULL);
+	static PIXEL* b=(PIXEL*)sds_alloc(sizeof(PIXEL)*WIDTH*HEIGHT);
+	static PIXEL* g=(PIXEL*)sds_alloc(sizeof(PIXEL)*WIDTH*HEIGHT);
+	static PIXEL* r=(PIXEL*)sds_alloc(sizeof(PIXEL)*WIDTH*HEIGHT);
+	gettimeofday(&end, NULL);
+	printf(" sds_alloc();\n took %lu us\n",(end.tv_sec-start.tv_sec)*1000000+(end.tv_usec-start.tv_usec));
+
+	gettimeofday(&start, NULL);
+	cvMat2array(bgr, b, g, r);
+	gettimeofday(&end, NULL);
+	printf(" cvMat2array(bgr, b, g, r);\n took %lu us\n",(end.tv_sec-start.tv_sec)*1000000+(end.tv_usec-start.tv_usec));
+
+	gettimeofday(&start, NULL);
+	jf_rgb2gray(b, g, r, gray.data,bgr.rows,bgr.cols);
+	gettimeofday(&end, NULL);
+	printf(" jf_rgb2gray(b, g, r, gray.data,bgr.rows,bgr.cols);\n took %lu us\n",(end.tv_sec-start.tv_sec)*1000000+(end.tv_usec-start.tv_usec));
 }
 
 int main(int argc, char** argv)
@@ -31,21 +33,28 @@ int main(int argc, char** argv)
 
 	cv::Mat jf_in,jf_out;
 	timeval start,end;
-
-	// reading in the color image
-	jf_in.data=(uint8*)sds_alloc(sizeof(uint8)*3*WIDTH*HEIGHT);
-	jf_out.data=(uint8*)sds_alloc(sizeof(uint8)*WIDTH*HEIGHT);
 	jf_in = cv::imread(argv[1], 1);
-	printf("img step %d\n",(int)jf_in.step);
 	if (jf_in.data == NULL)
 	{
 		fprintf(stderr,"Cannot open image at %s\n", argv[1]);
 		return 0;
 	}
 
+
 	jf_out.create(jf_in.rows,jf_in.cols,CV_8UC1);
-	//cv::cvtColor(jf_in,jf_out,CV_BGR2GRAY);
-	bgr2gray(jf_in,jf_out);
+	jf_out.data=(PIXEL*)sds_alloc(sizeof(PIXEL)*WIDTH*HEIGHT);
+
+	for(int i=0;i<10;i++)
+	{
+		bgr2gray(jf_in,jf_out);
+	}
+
+	cv::imwrite("jf_out.jpg", jf_out);
+
+	gettimeofday(&start, NULL);
+	cv::cvtColor(jf_in,jf_out,CV_BGR2GRAY);
+	gettimeofday(&end, NULL);
+	printf(" cv::cvtColor(jf_in,jf_out,CV_BGR2GRAY);\n took %lu us\n",(end.tv_sec-start.tv_sec)*1000000+(end.tv_usec-start.tv_usec));
 	cv::imwrite("out_ocv.jpg", jf_out);
 
 	return 0;

@@ -1,10 +1,9 @@
 
 #include "jf_bgr2gray_config.h"
 
-
-void jFbgr2gray(hls::stream<uint8>& b, hls::stream<uint8>& g, hls::stream<uint8>& r, hls::stream<uint8>& gray, int rows, int cols)
+void jFbgr2gray(hls::stream<PIXEL>& b, hls::stream<PIXEL>& g, hls::stream<PIXEL>& r, hls::stream<PIXEL>& gray, int rows, int cols)
 {
-	uint8 _b,_g,_r,_gray;
+	PIXEL _b,_g,_r,_gray;
 	for(int row = 0; row < rows; row++)
 	{
 #pragma HLS LOOP_TRIPCOUNT min=1 max=720
@@ -23,16 +22,16 @@ void jFbgr2gray(hls::stream<uint8>& b, hls::stream<uint8>& g, hls::stream<uint8>
 }
 
 
-void jf_rgb2gray(uint8* b, uint8* g, uint8* r, uint8* gray, int rows, int cols)
+void jf_rgb2gray(PIXEL* b, PIXEL* g, PIXEL* r, PIXEL* gray, int rows, int cols)
 {
 #pragma HLS INLINE OFF
 #pragma HLS DATAFLOW
-	hls::stream<uint8> _b;
-	hls::stream<uint8> _g;
-	hls::stream<uint8> _r;
-	hls::stream<uint8> _gray;
+	hls::stream<PIXEL> _b;
+	hls::stream<PIXEL> _g;
+	hls::stream<PIXEL> _r;
+	hls::stream<PIXEL> _gray;
 
-read_rgb:
+read:
 	for(int i=0; i<rows;i++)
 	{
 #pragma HLS LOOP_TRIPCOUNT min=1 max=720
@@ -41,15 +40,15 @@ read_rgb:
 #pragma HLS LOOP_TRIPCOUNT min=1 max=1280
 #pragma HLS PIPELINE
 #pragma HLS loop_flatten off
-			_b.write(*(b + i*cols*3+j*3));
-			_g.write(*(g + i*cols*3+j*3));
-			_r.write(*(r + i*cols*3+j*3));
+			_b.write(*(b + i*cols + j));
+			_g.write(*(g + i*cols + j));
+			_r.write(*(r + i*cols + j));
 		}
 	}
 
 	jFbgr2gray(_b, _g, _r, _gray, rows, cols);
 
-write_gray:
+write:
 	for(int i=0; i<rows;i++)
 	{
 #pragma HLS LOOP_TRIPCOUNT min=1 max=720

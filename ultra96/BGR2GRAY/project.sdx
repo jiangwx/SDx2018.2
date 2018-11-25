@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="ASCII"?>
+<sdsproject:SDSProject xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:sdsproject="http://www.xilinx.com/sdsproject" name="BGR2GRAY" location="/media/lulugay/WorkSpace/SDx/BGR2GRAY" platform="C:/Xilinx/SDx/2018.2/platforms\ultra96\ultra96.xpfm" platformUID="em.avnet.com:ultra96:ultra96:1.0" systemProject="BGR2GRAY_system" sysConfig="linux" runtime="C/C++" cpu="A53_Linux" cpuInstance="" os="linux" ConfigType="Debug">
+  <configuration name="Debug" id="com.xilinx.sdsoc.managedbuild.project.debug.1611867468" dirty="true">
+    <configBuildOptions xsi:type="sdsproject:Option" insertapm="false" gensdcard="true" dmclkid="3" enableHwSwTrace="false" traceApplication="false"/>
+    <lastBuildOptions xsi:type="sdsproject:Option" insertapm="false" gensdcard="true" dmclkid="3" enableHwSwTrace="false" traceApplication="false"/>
+  </configuration>
+  <configuration name="Release" id="com.xilinx.sdsoc.managedbuild.project.release.1155374774">
+    <configBuildOptions xsi:type="sdsproject:Option" insertapm="false" gensdcard="true" dmclkid="3" estimateSpeedup="true" enableHwSwTrace="false" traceApplication="false">
+      <accelerator name="jf_rgb2gray" filepath="src/jf_bgr2gray.cpp" clkid="3" location="D:/SDx2018.2/ultra96/BGR2GRAY/src/jf_bgr2gray.cpp"/>
+    </configBuildOptions>
+    <lastBuildOptions xsi:type="sdsproject:Option" insertapm="false" gensdcard="true" dmclkid="3" estimateSpeedup="true" enableHwSwTrace="false" traceApplication="false">
+      <accelerator name="jf_rgb2gray" filepath="src/jf_bgr2gray.cpp" clkid="3" location="D:/SDx2018.2/ultra96/BGR2GRAY/src/jf_bgr2gray.cpp"/>
+    </lastBuildOptions>
+  </configuration>
+</sdsproject:SDSProject>

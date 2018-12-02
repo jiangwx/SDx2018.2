@@ -58,7 +58,6 @@ write:
 #pragma HLS PIPELINE
 #pragma HLS loop_flatten off
 			*(gray + i*cols + j) = _gray.read();
-
 		}
 	}
 }

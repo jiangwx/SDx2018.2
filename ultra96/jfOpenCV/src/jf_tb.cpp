@@ -1,5 +1,16 @@
 #include "jf_headers.h"
 
+void dilate(cv::Mat& gray, cv::Mat& dilate)
+{
+	timeval start,end;
+	static PIXEL* g=(PIXEL*)sds_alloc(sizeof(PIXEL)*gray.rows*gray.cols);
+	gettimeofday(&start, NULL);
+	memcpy(g, gray.data, sizeof(PIXEL)*gray.rows*gray.cols);
+	jf_dilate(g, dilate.data, gray.rows, gray.cols);
+	gettimeofday(&end, NULL);
+	printf(" jf_dilate();\n took %lu us\n",(end.tv_sec-start.tv_sec)*1000000+(end.tv_usec-start.tv_usec));
+}
+
 void bgr2gray(cv::Mat& bgr, cv::Mat& gray)
 {
 	timeval start,end;
@@ -59,15 +70,16 @@ int main(int argc, char** argv)
 
 	for(int i=0;i<10;i++)
 	{
-		threshold(jf_in,jf_out,200,255);
+		dilate(jf_in,jf_out);
 	}
 
 	cv::imwrite("jf_out.jpg", jf_out);
 
 	gettimeofday(&start, NULL);
-	cv::threshold(jf_in,jf_out,200,255,CV_THRESH_BINARY);
+	cv::Mat element=cv::getStructuringElement(cv::MORPH_RECT,cv::Size(3,3));
+	cv::dilate(jf_in,jf_out,element,cv::Point(-1,-1),1);
 	gettimeofday(&end, NULL);
-	printf(" cv::threshold(jf_in,jf_out,200,255,CV_THRESH_BINARY);\n took %lu us\n",(end.tv_sec-start.tv_sec)*1000000+(end.tv_usec-start.tv_usec));
+	printf(" cv::dilate(jf_in,jf_out);\n took %lu us\n",(end.tv_sec-start.tv_sec)*1000000+(end.tv_usec-start.tv_usec));
 	cv::imwrite("out_ocv.jpg", jf_out);
 
 	return 0;

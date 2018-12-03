@@ -1,7 +1,7 @@
 
 #include "jf_config.h"
 
-void jFthreshold(hls::stream<PIXEL>& gray, hls::stream<PIXEL>& binary, int rows, int cols, PIXEL threshold, PIXEL maxval)
+static void jFthreshold(hls::stream<PIXEL>& gray, hls::stream<PIXEL>& binary, int rows, int cols, PIXEL threshold, PIXEL maxval)
 {
 	PIXEL _gray,_binary;
 	for(int row = 0; row < rows; row++)

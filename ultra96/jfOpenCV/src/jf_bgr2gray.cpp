@@ -1,7 +1,6 @@
-
 #include "jf_config.h"
 
-void jFbgr2gray(hls::stream<PIXEL>& b, hls::stream<PIXEL>& g, hls::stream<PIXEL>& r, hls::stream<PIXEL>& gray, int rows, int cols)
+static void jFbgr2gray(hls::stream<PIXEL>& b, hls::stream<PIXEL>& g, hls::stream<PIXEL>& r, hls::stream<PIXEL>& gray, int rows, int cols)
 {
 	PIXEL _b,_g,_r,_gray;
 	for(int row = 0; row < rows; row++)

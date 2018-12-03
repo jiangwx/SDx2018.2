@@ -44,6 +44,26 @@ void threshold(cv::Mat& gray, cv::Mat& binary, PIXEL threshold, PIXEL maxval)
 
 }
 
+void pre(cv::Mat& bgr, cv::Mat& dilate, PIXEL threshold, PIXEL maxval)
+{
+	timeval start,end;
+	gettimeofday(&start, NULL);
+	static PIXEL* b=(PIXEL*)sds_alloc(sizeof(PIXEL)*bgr.rows*bgr.cols);
+	static PIXEL* g=(PIXEL*)sds_alloc(sizeof(PIXEL)*bgr.rows*bgr.cols);
+	static PIXEL* r=(PIXEL*)sds_alloc(sizeof(PIXEL)*bgr.rows*bgr.cols);
+	gettimeofday(&end, NULL);
+	printf(" sds_alloc();\n took %lu us\n",(end.tv_sec-start.tv_sec)*1000000+(end.tv_usec-start.tv_usec));
+
+	gettimeofday(&start, NULL);
+	cvMat2array(bgr, b, g, r);
+	gettimeofday(&end, NULL);
+	printf(" cvMat2array(bgr, b, g, r);\n took %lu us\n",(end.tv_sec-start.tv_sec)*1000000+(end.tv_usec-start.tv_usec));
+
+	gettimeofday(&start, NULL);
+	jf_pre(b, g, r, dilate.data,bgr.rows,bgr.cols,threshold, maxval);
+	gettimeofday(&end, NULL);
+	printf(" jf_pre(b, g, r, gray.data,bgr.rows,bgr.cols);\n took %lu us\n",(end.tv_sec-start.tv_sec)*1000000+(end.tv_usec-start.tv_usec));
+}
 int main(int argc, char** argv)
 {
 
@@ -57,7 +77,7 @@ int main(int argc, char** argv)
 	cv::Mat jf_in,jf_out;
 	timeval start,end;
 
-	jf_in = cv::imread(argv[1], 0);
+	jf_in = cv::imread(argv[1], 1);
 
 	if (jf_in.data == NULL)
 	{
@@ -70,17 +90,19 @@ int main(int argc, char** argv)
 
 	for(int i=0;i<10;i++)
 	{
-		dilate(jf_in,jf_out);
+		pre(jf_in,jf_out,200,255);
 	}
-
 	cv::imwrite("jf_out.jpg", jf_out);
 
 	gettimeofday(&start, NULL);
+	cv::Mat gray,binary,dilate;
+	cv::cvtColor(jf_in,gray,CV_BGR2GRAY);
+	cv::threshold(gray,binary,200,255,CV_THRESH_BINARY);
 	cv::Mat element=cv::getStructuringElement(cv::MORPH_RECT,cv::Size(3,3));
-	cv::dilate(jf_in,jf_out,element,cv::Point(-1,-1),1);
+	cv::dilate(binary,dilate,element,cv::Point(-1,-1),1);
 	gettimeofday(&end, NULL);
-	printf(" cv::dilate(jf_in,jf_out);\n took %lu us\n",(end.tv_sec-start.tv_sec)*1000000+(end.tv_usec-start.tv_usec));
-	cv::imwrite("out_ocv.jpg", jf_out);
+	printf(" opencv preprocess took %lu us\n",(end.tv_sec-start.tv_sec)*1000000+(end.tv_usec-start.tv_usec));
+	cv::imwrite("out_ocv.jpg", dilate);
 
 	return 0;
 }

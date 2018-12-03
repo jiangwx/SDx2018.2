@@ -1,6 +1,6 @@
 #include "jf_config.h"
 
-PIXEL dilate_kernel(PIXEL WB[3][3])
+static PIXEL dilate_kernel(PIXEL WB[3][3])
 {
 #pragma HLS INLINE off
 	PIXEL array[9]={WB[0][0], WB[0][1], WB[0][2],
@@ -20,7 +20,7 @@ PIXEL dilate_kernel(PIXEL WB[3][3])
 	return max;
 }
 
-void jFdilate(hls::stream<PIXEL>& gray, hls::stream<PIXEL>& dilate, int rows, int cols)
+static void jFdilate(hls::stream<PIXEL>& gray, hls::stream<PIXEL>& dilate, int rows, int cols)
 {
 	PIXEL _dilate;
 

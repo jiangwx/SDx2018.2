@@ -22,7 +22,7 @@ PIXEL dilate_kernel(PIXEL WB[3][3])
 
 void jFdilate(hls::stream<PIXEL>& gray, hls::stream<PIXEL>& dilate, int rows, int cols)
 {
-	PIXEL _gray,_dilate;
+	PIXEL _dilate;
 
 	PIXEL LineBuffer[3][WIDTH];
 #pragma HLS ARRAY_PARTITION variable=LineBuffer complete dim=1
@@ -39,7 +39,7 @@ void jFdilate(hls::stream<PIXEL>& gray, hls::stream<PIXEL>& dilate, int rows, in
 #pragma HLS LOOP_TRIPCOUNT min=1 max=1280
 #pragma HLS pipeline
 		LineBuffer[0][col] = 0;
-		LineBuffer[1][col] = gray.read();
+		gray >> LineBuffer[1][col];
 	}
 
 	lb_r_i = 2;
@@ -83,7 +83,7 @@ void jFdilate(hls::stream<PIXEL>& gray, hls::stream<PIXEL>& dilate, int rows, in
 			WindowBuffer[1][1] = WindowBuffer[1][2];
 			WindowBuffer[2][1] = WindowBuffer[2][2];
 
-			dilate.write(_dilate);
+			dilate << _dilate;
 
 			lb_r_i++;
 			if(lb_r_i == 3) lb_r_i = 0;
@@ -98,31 +98,32 @@ void jf_dilate(PIXEL* gray, PIXEL* dilate, int rows, int cols)
 #pragma HLS DATAFLOW
 	hls::stream<PIXEL> _gray;
 	hls::stream<PIXEL> _dilate;
+	ap_uint<13> row, col;
 read:
-	for(int i=0; i<rows;i++)
+	for(row=0; row<rows; row++)
 	{
 #pragma HLS LOOP_TRIPCOUNT min=1 max=720
-		for(int j=0; j<cols;j++)
+		for(col=0; col<cols; col++)
 		{
 #pragma HLS LOOP_TRIPCOUNT min=1 max=1280
 #pragma HLS PIPELINE
 #pragma HLS loop_flatten off
-			_gray.write(*(gray + i*cols + j));
+			_gray.write(*(gray + row*cols + col));
 		}
 	}
 
 	jFdilate(_gray, _dilate, rows, cols);
 
 write:
-	for(int i=0; i<rows;i++)
+	for(row=0; row<rows; row++)
 	{
 #pragma HLS LOOP_TRIPCOUNT min=1 max=720
-		for(int j=0; j<cols;j++)
+		for(col=0; col<cols; col++)
 		{
 #pragma HLS LOOP_TRIPCOUNT min=1 max=1280
 #pragma HLS PIPELINE
 #pragma HLS loop_flatten off
-			*(dilate + i*cols + j) = _dilate.read();
+			*(dilate + row*cols + col) = _dilate.read();
 		}
 	}
 }

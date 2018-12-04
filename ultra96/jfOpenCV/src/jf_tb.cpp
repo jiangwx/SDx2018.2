@@ -44,7 +44,7 @@ void threshold(cv::Mat& gray, cv::Mat& binary, PIXEL threshold, PIXEL maxval)
 
 }
 
-void pre(cv::Mat& bgr, cv::Mat& dilate, PIXEL threshold, PIXEL maxval)
+void pre_process(cv::Mat& bgr, cv::Mat& color, cv::Mat& bright, PIXEL threshold, PIXEL maxval)
 {
 	timeval start,end;
 	gettimeofday(&start, NULL);
@@ -60,10 +60,23 @@ void pre(cv::Mat& bgr, cv::Mat& dilate, PIXEL threshold, PIXEL maxval)
 	printf(" cvMat2array(bgr, b, g, r);\n took %lu us\n",(end.tv_sec-start.tv_sec)*1000000+(end.tv_usec-start.tv_usec));
 
 	gettimeofday(&start, NULL);
-	jf_pre(b, g, r, dilate.data,bgr.rows,bgr.cols,threshold, maxval);
+	jf_color_pre(b, g, r, color.data, bgr.rows, bgr.cols, threshold, maxval);
 	gettimeofday(&end, NULL);
-	printf(" jf_pre(b, g, r, gray.data,bgr.rows,bgr.cols);\n took %lu us\n",(end.tv_sec-start.tv_sec)*1000000+(end.tv_usec-start.tv_usec));
+	printf(" jf_color_pre();\n took %lu us\n",(end.tv_sec-start.tv_sec)*1000000+(end.tv_usec-start.tv_usec));
+
+	gettimeofday(&start, NULL);
+	jf_bright_pre(b, g, r, bright.data, bgr.rows, bgr.cols, threshold, maxval);
+	gettimeofday(&end, NULL);
+	printf(" jf_bright_pre();\n took %lu us\n",(end.tv_sec-start.tv_sec)*1000000+(end.tv_usec-start.tv_usec));
 }
+
+void distilate(cv::Mat &src, cv::Mat &dst)
+{
+	std::vector<cv::Mat> bgr;
+	cv::split(src, bgr);
+	cv::subtract(bgr[0], bgr[2], dst);
+}
+
 int main(int argc, char** argv)
 {
 
@@ -74,7 +87,7 @@ int main(int argc, char** argv)
 		return -1;
 	}
 
-	cv::Mat jf_in,jf_out;
+	cv::Mat jf_in,bright,color;
 	timeval start,end;
 
 	jf_in = cv::imread(argv[1], 1);
@@ -84,25 +97,31 @@ int main(int argc, char** argv)
 		fprintf(stderr,"Cannot open image at %s\n", argv[1]);
 		return 0;
 	}
-
-	jf_out.create(jf_in.rows,jf_in.cols,CV_8UC1);
-	jf_out.data=(PIXEL*)sds_alloc(sizeof(PIXEL)*WIDTH*HEIGHT);
+	color.create(jf_in.rows,jf_in.cols,CV_8UC1);
+	color.data =(PIXEL*)sds_alloc(sizeof(PIXEL)*jf_in.rows*jf_in.cols);
+	bright.create(jf_in.rows,jf_in.cols,CV_8UC1);
+	bright.data=(PIXEL*)sds_alloc(sizeof(PIXEL)*jf_in.rows*jf_in.cols);
 
 	for(int i=0;i<10;i++)
 	{
-		pre(jf_in,jf_out,200,255);
+		pre_process(jf_in, color, bright, 200, 255);
 	}
-	cv::imwrite("jf_out.jpg", jf_out);
+	cv::imwrite("jf_color.jpg", color);
+	cv::imwrite("jf_bright.jpg", bright);
 
 	gettimeofday(&start, NULL);
-	cv::Mat gray,binary,dilate;
+	cv::Mat gray,sub,binary;
 	cv::cvtColor(jf_in,gray,CV_BGR2GRAY);
-	cv::threshold(gray,binary,200,255,CV_THRESH_BINARY);
+	cv::threshold(gray,bright,200,255,CV_THRESH_BINARY);
+
+	distilate(jf_in,sub);
+	cv::threshold(sub,binary,200,255,CV_THRESH_BINARY);
 	cv::Mat element=cv::getStructuringElement(cv::MORPH_RECT,cv::Size(3,3));
-	cv::dilate(binary,dilate,element,cv::Point(-1,-1),1);
+	cv::dilate(binary,color,element,cv::Point(-1,-1),1);
 	gettimeofday(&end, NULL);
-	printf(" opencv preprocess took %lu us\n",(end.tv_sec-start.tv_sec)*1000000+(end.tv_usec-start.tv_usec));
-	cv::imwrite("out_ocv.jpg", dilate);
+	printf(" opencv pre-process took %lu us\n",(end.tv_sec-start.tv_sec)*1000000+(end.tv_usec-start.tv_usec));
+	cv::imwrite("ocv_color.jpg", color);
+	cv::imwrite("ocv_bright.jpg", bright);
 
 	return 0;
 }

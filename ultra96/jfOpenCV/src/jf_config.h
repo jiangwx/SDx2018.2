@@ -30,12 +30,27 @@ void jf_threshold(PIXEL* gray, PIXEL* binary,int rows, int cols, PIXEL threshold
 void jf_dilate(PIXEL* gray, PIXEL* dilate,int rows, int cols);
 
 #pragma SDS data mem_attribute("b":NON_CACHEABLE|PHYSICAL_CONTIGUOUS)
+#pragma SDS data mem_attribute("r":NON_CACHEABLE|PHYSICAL_CONTIGUOUS)
+#pragma SDS data mem_attribute("sub":NON_CACHEABLE|PHYSICAL_CONTIGUOUS)
+#pragma SDS data access_pattern("b":SEQUENTIAL,"r":SEQUENTIAL,"sub":SEQUENTIAL)
+#pragma SDS data zero_copy("b"[0:rows*cols],"r"[0:rows*cols],"sub"[0:rows*cols])
+void jf_subtract(PIXEL* b, PIXEL* r, PIXEL* sub, int rows, int cols);
+
+#pragma SDS data mem_attribute("b":NON_CACHEABLE|PHYSICAL_CONTIGUOUS)
+#pragma SDS data mem_attribute("g":NON_CACHEABLE|PHYSICAL_CONTIGUOUS)
+#pragma SDS data mem_attribute("r":NON_CACHEABLE|PHYSICAL_CONTIGUOUS)
+#pragma SDS data mem_attribute("binary":NON_CACHEABLE|PHYSICAL_CONTIGUOUS)
+#pragma SDS data access_pattern("b":SEQUENTIAL,"g":SEQUENTIAL,"r":SEQUENTIAL,"binary":SEQUENTIAL)
+#pragma SDS data zero_copy("b"[0:rows*cols],"g"[0:rows*cols],"r"[0:rows*cols],"binary"[0:rows*cols])
+void jf_bright_pre(PIXEL* b, PIXEL* g, PIXEL* r, PIXEL* binary, int rows, int cols, PIXEL threshold, PIXEL maxval);
+
+#pragma SDS data mem_attribute("b":NON_CACHEABLE|PHYSICAL_CONTIGUOUS)
 #pragma SDS data mem_attribute("g":NON_CACHEABLE|PHYSICAL_CONTIGUOUS)
 #pragma SDS data mem_attribute("r":NON_CACHEABLE|PHYSICAL_CONTIGUOUS)
 #pragma SDS data mem_attribute("dilate":NON_CACHEABLE|PHYSICAL_CONTIGUOUS)
 #pragma SDS data access_pattern("b":SEQUENTIAL,"g":SEQUENTIAL,"r":SEQUENTIAL,"dilate":SEQUENTIAL)
 #pragma SDS data zero_copy("b"[0:rows*cols],"g"[0:rows*cols],"r"[0:rows*cols],"dilate"[0:rows*cols])
-void jf_pre(PIXEL* b, PIXEL* g, PIXEL* r, PIXEL* dilate, int rows, int cols, PIXEL threshold, PIXEL maxval);
+void jf_color_pre(PIXEL* b, PIXEL* g, PIXEL* r, PIXEL* dilate, int rows, int cols, PIXEL threshold, PIXEL maxval);
 
 #endif
 

@@ -15,19 +15,17 @@ void bgr2gray(cv::Mat& bgr, cv::Mat& gray)
 {
 	timeval start,end;
 	gettimeofday(&start, NULL);
-	static PIXEL* b=(PIXEL*)sds_alloc(sizeof(PIXEL)*bgr.rows*bgr.cols);
-	static PIXEL* g=(PIXEL*)sds_alloc(sizeof(PIXEL)*bgr.rows*bgr.cols);
-	static PIXEL* r=(PIXEL*)sds_alloc(sizeof(PIXEL)*bgr.rows*bgr.cols);
+	static PIXEL4* bgra=(PIXEL4*)sds_alloc(sizeof(PIXEL4)*bgr.rows*bgr.cols);
 	gettimeofday(&end, NULL);
 	printf(" sds_alloc();\n took %lu us\n",(end.tv_sec-start.tv_sec)*1000000+(end.tv_usec-start.tv_usec));
 
 	gettimeofday(&start, NULL);
-	cvMat2array(bgr, b, g, r);
+	cvMat2array(bgr, bgra);
 	gettimeofday(&end, NULL);
 	printf(" cvMat2array(bgr, b, g, r);\n took %lu us\n",(end.tv_sec-start.tv_sec)*1000000+(end.tv_usec-start.tv_usec));
 
 	gettimeofday(&start, NULL);
-	jf_rgb2gray(b, g, r, gray.data,bgr.rows,bgr.cols);
+	jf_rgb2gray(bgra, gray.data,bgr.rows,bgr.cols);
 	gettimeofday(&end, NULL);
 	printf(" jf_rgb2gray(b, g, r, gray.data,bgr.rows,bgr.cols);\n took %lu us\n",(end.tv_sec-start.tv_sec)*1000000+(end.tv_usec-start.tv_usec));
 }

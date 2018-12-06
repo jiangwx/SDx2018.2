@@ -21,10 +21,11 @@ static void jFbgr2gray(hls::stream<PIXEL>& b, hls::stream<PIXEL>& g, hls::stream
 }
 
 
-void jf_rgb2gray(PIXEL* b, PIXEL* g, PIXEL* r, PIXEL* gray, int rows, int cols)
+void jf_rgb2gray(PIXEL4* bgra, PIXEL* gray, int rows, int cols)
 {
 #pragma HLS INLINE OFF
 #pragma HLS DATAFLOW
+	hls::stream<PIXEL4> _bgra;
 	hls::stream<PIXEL> _b;
 	hls::stream<PIXEL> _g;
 	hls::stream<PIXEL> _r;
@@ -39,9 +40,11 @@ read:
 #pragma HLS LOOP_TRIPCOUNT min=1 max=1280
 #pragma HLS PIPELINE
 #pragma HLS loop_flatten off
-			_b.write(*(b + i*cols + j));
-			_g.write(*(g + i*cols + j));
-			_r.write(*(r + i*cols + j));
+			_bgra.write(*(bgra + i*cols + j));
+			_b = _bgra.range(31, 24);
+			_g = _bgra.range(23, 16);
+			_r = _bgra.range(15, 8);
+
 		}
 	}
 

@@ -16,7 +16,7 @@
 
 #include "jf_config.h"
 
-void cvMat2array(cv::Mat src, PIXEL* b, PIXEL* g, PIXEL* r);
+void cvMat2array(cv::Mat src, PIXEL4* bgr);
 
 #define WIDTH 	1280
 #define HEIGHT	720

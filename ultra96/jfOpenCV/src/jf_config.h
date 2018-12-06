@@ -10,14 +10,15 @@
 #define HEIGHT	720
 
 typedef uint8_t PIXEL;
+typedef ap_uint<32> PIXEL4;
+typedef ap_uint<64> PIXEL8;
+typedef ap_uint<128> PIXEL16;
 
-#pragma SDS data mem_attribute("b":NON_CACHEABLE|PHYSICAL_CONTIGUOUS)
-#pragma SDS data mem_attribute("g":NON_CACHEABLE|PHYSICAL_CONTIGUOUS)
-#pragma SDS data mem_attribute("r":NON_CACHEABLE|PHYSICAL_CONTIGUOUS)
+#pragma SDS data mem_attribute("bgra":NON_CACHEABLE|PHYSICAL_CONTIGUOUS)
 #pragma SDS data mem_attribute("gray":NON_CACHEABLE|PHYSICAL_CONTIGUOUS)
-#pragma SDS data access_pattern("b":SEQUENTIAL,"g":SEQUENTIAL,"r":SEQUENTIAL,"gray":SEQUENTIAL)
-#pragma SDS data zero_copy("b"[0:rows*cols],"g"[0:rows*cols],"r"[0:rows*cols],"gray"[0:rows*cols])
-void jf_rgb2gray(PIXEL* b, PIXEL* g, PIXEL* r, PIXEL* gray, int rows, int cols);
+#pragma SDS data access_pattern("bgra":SEQUENTIAL,"gray":SEQUENTIAL)
+#pragma SDS data zero_copy("bgra"[0:rows*cols],"gray"[0:rows*cols])
+void jf_rgb2gray(PIXEL4* bgra, PIXEL* gray, int rows, int cols);
 
 #pragma SDS data mem_attribute("gray":NON_CACHEABLE|PHYSICAL_CONTIGUOUS,"binary":NON_CACHEABLE|PHYSICAL_CONTIGUOUS)
 #pragma SDS data access_pattern("gray":SEQUENTIAL,"binary":SEQUENTIAL)

@@ -60,12 +60,12 @@ void pre_process(cv::Mat& bgr, cv::Mat& color, cv::Mat& bright, PIXEL threshold,
 	printf(" cvMat2array(bgr, b, g, r);\n took %lu us\n",(end.tv_sec-start.tv_sec)*1000000+(end.tv_usec-start.tv_usec));
 
 	gettimeofday(&start, NULL);
+#pragma SDS async(1)
 	jf_color_pre(b, g, r, color.data, bgr.rows, bgr.cols, threshold, maxval);
-	gettimeofday(&end, NULL);
-	printf(" jf_color_pre();\n took %lu us\n",(end.tv_sec-start.tv_sec)*1000000+(end.tv_usec-start.tv_usec));
-
-	gettimeofday(&start, NULL);
+#pragma SDS async(2)
 	jf_bright_pre(b, g, r, bright.data, bgr.rows, bgr.cols, threshold, maxval);
+#pragma SDS wait(1)
+#pragma SDS wait(2)
 	gettimeofday(&end, NULL);
 	printf(" jf_bright_pre();\n took %lu us\n",(end.tv_sec-start.tv_sec)*1000000+(end.tv_usec-start.tv_usec));
 }

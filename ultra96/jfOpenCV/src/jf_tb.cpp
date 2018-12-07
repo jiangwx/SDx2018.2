@@ -67,7 +67,7 @@ void pre_process(cv::Mat& bgr, cv::Mat& color, cv::Mat& bright, PIXEL threshold,
 #pragma SDS wait(1)
 #pragma SDS wait(2)
 	gettimeofday(&end, NULL);
-	printf(" jf_bright_pre();\n took %lu us\n",(end.tv_sec-start.tv_sec)*1000000+(end.tv_usec-start.tv_usec));
+	printf(" jf_pre();\n took %lu us\n",(end.tv_sec-start.tv_sec)*1000000+(end.tv_usec-start.tv_usec));
 }
 
 void distilate(cv::Mat &src, cv::Mat &dst)

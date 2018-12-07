@@ -30,7 +30,7 @@ static void jFdilate(hls::stream<PIXEL>& gray, hls::stream<PIXEL>& dilate, int r
 	PIXEL WindowBuffer[3][3];
 #pragma HLS ARRAY_PARTITION variable=WindowBuffer complete dim=0
 
-	ap_uint<13> row, col;
+	ap_uint<12> row, col;
 	ap_uint<2> lb_r_i;
 	ap_uint<2> top, mid, btm;//linebuffer row index
 
@@ -98,7 +98,7 @@ void jf_dilate(PIXEL* gray, PIXEL* dilate, int rows, int cols)
 #pragma HLS DATAFLOW
 	hls::stream<PIXEL> _gray;
 	hls::stream<PIXEL> _dilate;
-	ap_uint<13> row, col;
+	ap_uint<12> row, col;
 read:
 	for(row=0; row<rows; row++)
 	{

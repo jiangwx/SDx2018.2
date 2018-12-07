@@ -22,7 +22,7 @@ void bgr2gray(cv::Mat& bgr, cv::Mat& gray)
 	gettimeofday(&start, NULL);
 	cvMat2array(bgr, bgra);
 	gettimeofday(&end, NULL);
-	printf(" cvMat2array(bgr, b, g, r);\n took %lu us\n",(end.tv_sec-start.tv_sec)*1000000+(end.tv_usec-start.tv_usec));
+	printf("cvMat2array(bgr, bgra);\n took %lu us\n",(end.tv_sec-start.tv_sec)*1000000+(end.tv_usec-start.tv_usec));
 
 	gettimeofday(&start, NULL);
 	jf_rgb2gray(bgra, gray.data,bgr.rows,bgr.cols);
@@ -46,22 +46,20 @@ void pre_process(cv::Mat& bgr, cv::Mat& color, cv::Mat& bright, PIXEL threshold,
 {
 	timeval start,end;
 	gettimeofday(&start, NULL);
-	static PIXEL* b=(PIXEL*)sds_alloc(sizeof(PIXEL)*bgr.rows*bgr.cols);
-	static PIXEL* g=(PIXEL*)sds_alloc(sizeof(PIXEL)*bgr.rows*bgr.cols);
-	static PIXEL* r=(PIXEL*)sds_alloc(sizeof(PIXEL)*bgr.rows*bgr.cols);
+	static PIXEL4* bgra=(PIXEL4*)sds_alloc(sizeof(PIXEL4)*bgr.rows*bgr.cols);
 	gettimeofday(&end, NULL);
 	printf(" sds_alloc();\n took %lu us\n",(end.tv_sec-start.tv_sec)*1000000+(end.tv_usec-start.tv_usec));
 
 	gettimeofday(&start, NULL);
-	cvMat2array(bgr, b, g, r);
+	cvMat2array(bgr, bgra);
 	gettimeofday(&end, NULL);
-	printf(" cvMat2array(bgr, b, g, r);\n took %lu us\n",(end.tv_sec-start.tv_sec)*1000000+(end.tv_usec-start.tv_usec));
+	printf(" cvMat2array(bgr, bgra);\n took %lu us\n",(end.tv_sec-start.tv_sec)*1000000+(end.tv_usec-start.tv_usec));
 
 	gettimeofday(&start, NULL);
 #pragma SDS async(1)
-	jf_color_pre(b, g, r, color.data, bgr.rows, bgr.cols, threshold, maxval);
+	jf_color_pre(bgra, color.data, bgr.rows, bgr.cols, threshold, maxval);
 #pragma SDS async(2)
-	jf_bright_pre(b, g, r, bright.data, bgr.rows, bgr.cols, threshold, maxval);
+	jf_bright_pre(bgra, bright.data, bgr.rows, bgr.cols, threshold, maxval);
 #pragma SDS wait(1)
 #pragma SDS wait(2)
 	gettimeofday(&end, NULL);

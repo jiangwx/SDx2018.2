@@ -52,6 +52,12 @@ void jf_bright_pre(PIXEL* b, PIXEL* g, PIXEL* r, PIXEL* binary, int rows, int co
 #pragma SDS data zero_copy("b"[0:rows*cols],"g"[0:rows*cols],"r"[0:rows*cols],"dilate"[0:rows*cols])
 void jf_color_pre(PIXEL* b, PIXEL* g, PIXEL* r, PIXEL* dilate, int rows, int cols, PIXEL threshold, PIXEL maxval);
 
+#pragma SDS data mem_attribute("bright":NON_CACHEABLE|PHYSICAL_CONTIGUOUS)
+#pragma SDS data mem_attribute("color":NON_CACHEABLE|PHYSICAL_CONTIGUOUS)
+#pragma SDS data mem_attribute("AND":NON_CACHEABLE|PHYSICAL_CONTIGUOUS)
+#pragma SDS data access_pattern("bright":SEQUENTIAL,"color":SEQUENTIAL,"AND":SEQUENTIAL)
+#pragma SDS data zero_copy("bright"[0:rows*cols],"color"[0:rows*cols],"AND"[0:rows*cols])
+void jf_and(PIXEL* bright, PIXEL* color, PIXEL* AND, int rows, int cols);
 #endif
 
 
